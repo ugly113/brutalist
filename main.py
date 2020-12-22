@@ -1,35 +1,24 @@
 import itertools
 
 
-characters = [
-            'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p',
-            'q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6',
-            '7','8','9','0','A','B','C','D','E','F','G','H','I','J','K','L',
-            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
-            ]
+characters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()><?/\|}{[]`~`}"
 
-password = input('Choose a 3 character password: ')
-
-
-def main():
-    cracked = ''
+def crack(password):
     attempt = 0
-    per = itertools.permutations(characters, 3)
+    per = itertools.product(characters, repeat=6)
     for val in per:
         attempt = attempt +1
         print(*val)
-        cracked = val
+        cracked = ''.join(val)
         if password == cracked:
             print(f'\n.:: {password} ::. Password broken after {attempt} attemps')
+            break
 
-"""    while password != cracked:
-        cracked = random.choice(characters)
-        cracked = cracked + random.choice(characters)
-        cracked = cracked + random.choice(characters)
-        attempt = attempt +1
-        print(cracked)
-    print(f'\n.:: {password} ::. Password broken after {attempt} attemps')
-"""
+
+def main():
+    password = input('Choose a 6 character password: ')
+    crack(password)
+
 
 if __name__ == '__main__':
     main()

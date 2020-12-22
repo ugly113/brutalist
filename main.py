@@ -1,24 +1,44 @@
 import itertools
 
 
-characters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()><?/\|}{[]`~`}"
+# Possible password characters
+characters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()><?/\|}{[]`~_.,-+=:;"
 
-def crack(password):
-    attempt = 0
-    per = itertools.product(characters, repeat=6)
+# Starting variables
+attempt = 0
+length = 0
+cracked = False
+
+
+# Show results of password crack
+def results(cracked, password, attempt):
+    print(f'\n.:: {password} ::. Password cracked after {attempt} attempts\n')
+    again = input('Crack another? y/n ')
+    if again.lower() == 'y':
+        main()
+    else:
+        exit()
+
+# Loop combinations - Count attempts
+def loop(length, password, attempt, cracked):
+    if cracked == True:
+        results(cracked, password, attempt)
+    per = itertools.product(characters, repeat = length)
     for val in per:
-        attempt = attempt +1
         print(*val)
         cracked = ''.join(val)
+        attempt = attempt + 1
         if password == cracked:
-            print(f'\n.:: {password} ::. Password broken after {attempt} attemps')
+            cracked = True
             break
+    length = length + 1
+    loop(length, password, attempt, cracked)
 
-
+# Input test password and initiate crack function
 def main():
-    password = input('Choose a 6 character password: ')
-    crack(password)
-
+    password = input('Choose password: ')
+    length = int(input('Choose min password length: '))
+    loop(length, password, 0, cracked)
 
 if __name__ == '__main__':
     main()

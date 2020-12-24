@@ -1,28 +1,27 @@
 import itertools
-
+from time import process_time_ns, strftime, gmtime
 
 # Possible password characters
 characters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()><?/\|}{[]`~_.,-+=:;"
 
-# Starting variables
-attempt = 0
-length = 0
-cracked = False
-
 
 # Show results of password crack
-def results(cracked, password, attempt):
-    print(f'\n.:: {password} ::. Password cracked after {attempt} attempts\n')
-    again = input('Crack another? y/n ')
+def results(cracked, password, attempt, time):
+    print(f'\n.:: {password} ::. Password cracked after {attempt} attempts')
+    print(f'Time elapsed- {strftime("%H:%M:%S", gmtime(time))}')
+#    convert_time(time)
+    again = input(f'\nCrack another? y/n ')
     if again.lower() == 'y':
         main()
     else:
         exit()
 
 # Loop combinations - Count attempts
-def loop(length, password, attempt, cracked):
+def loop(length, password, attempt, cracked, t1_start):
     if cracked == True:
-        results(cracked, password, attempt)
+        t1_stop = process_time_ns()
+        time = (t1_stop - t1_start)
+        results(cracked, password, attempt, time)
     per = itertools.product(characters, repeat = length)
     for val in per:
         print(*val)
@@ -32,13 +31,15 @@ def loop(length, password, attempt, cracked):
             cracked = True
             break
     length = length + 1
-    loop(length, password, attempt, cracked)
+    loop(length, password, attempt, cracked, t1_start)
 
 # Input test password and initiate crack function
 def main():
     password = input('Choose password: ')
     length = int(input('Choose min password length: '))
-    loop(length, password, 0, cracked)
+    t1_start = process_time_ns()
+    loop(length, password, 0, False, t1_start)
+
 
 if __name__ == '__main__':
     main()

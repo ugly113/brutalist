@@ -3,7 +3,7 @@ import itertools
 
 
 # Possible password characters
-characters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()><?/\|}{[]`~_.,-+=:;"
+characters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()><?/\|}{[]`~_.,-+=:; "
 
 
 # Show results of password crack
@@ -20,16 +20,21 @@ def list(length, password, attempt, cracked):
     if cracked == True:
         results(cracked, password, attempt)
     else:
-        with open('pw_list.txt', encoding='utf-8') as f:
+        with open('pw_test.txt', encoding='utf-8') as f:
             pw_list = [line.strip() for line in f]
             for pw in pw_list:
-                print(pw)
-                cracked = pw
-                attempt += 1
-                if password == cracked:
-                    cracked = True
-                    break
-            brute(length, password, attempt, cracked)
+                if len(pw) >= length:
+                    print(pw)
+                    cracked = pw
+                    attempt += 1
+                    if password == cracked:
+                        cracked = True
+                        break
+            to_brute = input('\nNot found on password list. Try brute force? y/n ')
+            if to_brute == 'y':
+                brute(length, password, attempt, cracked)
+            else:
+                exit()
 
 # Attempt to crack with brute force
 def brute(length, password, attempt, cracked):

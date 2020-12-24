@@ -1,44 +1,56 @@
+
 import itertools
-from time import process_time_ns, strftime, gmtime
+
 
 # Possible password characters
 characters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()><?/\|}{[]`~_.,-+=:;"
 
 
 # Show results of password crack
-def results(cracked, password, attempt, time):
+def results(password, attempt):
     print(f'\n.:: {password} ::. Password cracked after {attempt} attempts')
-    print(f'Time elapsed- {strftime("%H:%M:%S", gmtime(time))}')
-#    convert_time(time)
     again = input(f'\nCrack another? y/n ')
     if again.lower() == 'y':
         main()
     else:
         exit()
 
-# Loop combinations - Count attempts
-def loop(length, password, attempt, cracked, t1_start):
+# Attempt to crack with word list before brute force
+def list(length, password, attempt, cracked):
     if cracked == True:
-        t1_stop = process_time_ns()
-        time = (t1_stop - t1_start)
-        results(cracked, password, attempt, time)
+        results(cracked, password, attempt)
+    else:
+        with open('pw_list.txt', encoding='utf-8') as f:
+            pw_list = [line.strip() for line in f]
+            for pw in pw_list:
+                print(pw)
+                cracked = pw
+                attempt += 1
+                if password == cracked:
+                    cracked = True
+                    break
+            brute(length, password, attempt, cracked)
+
+# Attempt to crack with brute force
+def brute(length, password, attempt, cracked):
+    if cracked == True:
+        results(password, attempt)
     per = itertools.product(characters, repeat = length)
     for val in per:
         print(*val)
         cracked = ''.join(val)
-        attempt = attempt + 1
+        attempt += 1
         if password == cracked:
             cracked = True
             break
-    length = length + 1
-    loop(length, password, attempt, cracked, t1_start)
+    length += 1
+    brute(length, password, attempt, cracked)
 
 # Input test password and initiate crack function
 def main():
     password = input('Choose password: ')
     length = int(input('Choose min password length: '))
-    t1_start = process_time_ns()
-    loop(length, password, 0, False, t1_start)
+    list(length, password, 0, False)
 
 
 if __name__ == '__main__':

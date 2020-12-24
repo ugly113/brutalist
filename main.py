@@ -17,24 +17,22 @@ def results(password, attempt):
 
 # Attempt to crack with word list before brute force
 def list(length, password, attempt, cracked):
-    if cracked == True:
-        results(cracked, password, attempt)
-    else:
-        with open('pw_test.txt', encoding='utf-8') as f:
-            pw_list = [line.strip() for line in f]
-            for pw in pw_list:
-                if len(pw) >= length:
-                    print(pw)
-                    cracked = pw
-                    attempt += 1
-                    if password == cracked:
-                        cracked = True
-                        break
-            to_brute = input('\nNot found on password list. Try brute force? y/n ')
-            if to_brute == 'y':
-                brute(length, password, attempt, cracked)
-            else:
-                exit()
+    with open('pw_list.txt', encoding='utf-8') as f:
+        pw_list = [line.strip() for line in f]
+        for pw in pw_list:
+            if len(pw) >= length:
+                print(pw)
+                cracked = pw
+                attempt += 1
+                if password == cracked:
+                    cracked = True
+                    results(password, attempt)
+                    break
+        to_brute = input('\nNot found on password list. Try brute force? y/n ')
+        if to_brute == 'y':
+            brute(length, password, attempt, cracked)
+        else:
+            exit()
 
 # Attempt to crack with brute force
 def brute(length, password, attempt, cracked):

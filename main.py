@@ -8,7 +8,7 @@ characters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$
 
 # Show results of password crack
 def results(password, attempt):
-    print(f'\n.:: {password} ::. Password cracked after {attempt} attempts')
+    print(f'\n::: {password} ::: Password cracked after {attempt:,} attempts')
     again = input(f'\nCrack another? y/n ')
     if again.lower() == 'y':
         main()
@@ -16,7 +16,7 @@ def results(password, attempt):
         exit()
 
 # Attempt to crack with word list before brute force
-def list(length, password, attempt, cracked):
+def list(length, password, attempt, cracked, mode):
     with open('pw_list.txt', encoding='utf-8') as f:
         pw_list = [line.strip() for line in f]
         for pw in pw_list:
@@ -24,15 +24,24 @@ def list(length, password, attempt, cracked):
                 print(pw)
                 cracked = pw
                 attempt += 1
+                if attempt % 1000000 == 0 and mode =='m':
+                    continue_check = (input('Continue? y/n '))
+                    if continue_check == 'y':
+                        continue
+                    else:
+                        main()
                 if password == cracked:
                     cracked = True
                     results(password, attempt)
                     break
-        to_brute = input('\nNot found on password list. Try brute force? y/n ')
-        if to_brute == 'y':
+        if mode == f:
             brute(length, password, attempt, cracked)
-        else:
-            exit()
+        elif mode == 'm' or 's':
+            to_brute = input('\nNot found in password list. Try brute force? y/n ')
+            if to_brute == 'y':
+                brute(length, password, attempt, cracked)
+            else:
+                exit()
 
 # Attempt to crack with brute force
 def brute(length, password, attempt, cracked):
@@ -43,17 +52,25 @@ def brute(length, password, attempt, cracked):
         print(*val)
         cracked = ''.join(val)
         attempt += 1
+        if attempt % 100000 == 0 and mode == 'm':
+            continue_check = (input('Continue? y/n '))
+            if continue_check == 'y':
+                continue
+            else:
+                main()
         if password == cracked:
             cracked = True
             break
     length += 1
     brute(length, password, attempt, cracked)
 
-# Input test password and initiate crack function
+# Input test password - set min password length - mode select - initiate crack function
 def main():
     password = input('Choose password: ')
     length = int(input('Choose min password length: '))
-    list(length, password, 0, False)
+    mode_select = input(f'M_anual\nS_emi Auto\nF_ull Auto\nChoose mode: ')
+    mode = mode_select
+    list(length, password, 0, False, mode)
 
 
 if __name__ == '__main__':

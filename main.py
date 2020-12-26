@@ -7,8 +7,8 @@ characters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$
 
 
 # Show results of password crack
-def results(password, attempt):
-    print(f'\n::: {password} ::: Password cracked after {attempt:,} attempts')
+def results(attempt, cracked):
+    print(f'\n::: {cracked} ::: Password cracked after {attempt:,} attempts')
     again = input(f'\nCrack another? y/n ')
     if again.lower() == 'y':
         main()
@@ -22,7 +22,7 @@ def list(length, password, attempt, cracked, mode):
         for pw in pw_list:
             if len(pw) >= length:
                 print(pw)
-                cracked = pw
+                cracked_pw = pw
                 attempt += 1
                 if attempt % 1000000 == 0 and mode =='m':
                     continue_check = (input('Continue? y/n '))
@@ -30,9 +30,9 @@ def list(length, password, attempt, cracked, mode):
                         continue
                     else:
                         main()
-                if password == cracked:
-                    cracked = True
-                    results(password, attempt)
+                if password == cracked_pw:
+                    cracked = cracked_pw
+                    results(attempt, cracked)
                     break
         if mode == f:
             brute(length, password, attempt, cracked)
@@ -45,12 +45,10 @@ def list(length, password, attempt, cracked, mode):
 
 # Attempt to crack with brute force
 def brute(length, password, attempt, cracked):
-    if cracked == True:
-        results(password, attempt)
     per = itertools.product(characters, repeat = length)
     for val in per:
         print(*val)
-        cracked = ''.join(val)
+        cracked_pw = ''.join(val)
         attempt += 1
         if attempt % 100000 == 0 and mode == 'm':
             continue_check = (input('Continue? y/n '))
@@ -58,9 +56,9 @@ def brute(length, password, attempt, cracked):
                 continue
             else:
                 main()
-        if password == cracked:
-            cracked = True
-            break
+        if password == cracked_pw:
+            cracked = cracked_pw
+            results(attempt, cracked)
     length += 1
     brute(length, password, attempt, cracked)
 
@@ -68,7 +66,7 @@ def brute(length, password, attempt, cracked):
 def main():
     password = input('Choose password: ')
     length = int(input('Choose min password length: '))
-    mode_select = input(f'M_anual\nS_emi Auto\nF_ull Auto\nChoose mode: ')
+    mode_select = input(f'M_anual | S_emi Auto | F_ull Auto\nChoose mode: ')
     mode = mode_select
     list(length, password, 0, False, mode)
 

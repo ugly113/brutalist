@@ -29,7 +29,7 @@ def list(length, password, attempt, cracked, mode):
                 cracked_pw = pw
                 cracked_pw_h = h.sha256(cracked_pw)
                 attempt += 1
-                if attempt % 10000000 == 0 and mode =='m':
+                if attempt % 100 000 000 == 0 and mode =='m':
                     continue_check = (input(f'{attempt:,} attempts. Continue? y/n '))
                     if continue_check == 'y':
                         continue
@@ -55,7 +55,7 @@ def brute(length, password, attempt, cracked):
         print(*val)
         cracked_pw = ''.join(val)
         attempt += 1
-        if attempt % 10000000 == 0 and mode == 'm':
+        if attempt % 500 000 000 == 0 and mode == 'm':
             continue_check = (input(f'{attempt:,} attempts. Continue? y/n '))
             if continue_check == 'y':
                 continue
@@ -78,13 +78,13 @@ def smart_dict(password, attempt, cracked, dictionary, item_num, mode, length):
                 print(cracked_pw)
                 cracked_pw_h = h.sha256(cracked_pw)
                 attempt += 1
-                if attempt % 10000000 == 0 and mode == 'm':
+                if attempt % 100 000 000 == 0 and mode == 'm':
                     continue_check = (input(f'{attempt:,} attempts. Continue? y/n '))
                     if continue_check == 'y':
                         continue
                     else:
                         main()
-                if attempt % 10000000 == 0:
+                if attempt % 100 000 000 == 0:
                     continue_check = (input(f'{attempt:,} attempts. Continue? y/n '))
                     if continue_check == 'y':
                         continue
@@ -109,7 +109,7 @@ def main():
     password = input('\nInput hashed password: ')
     length = int(input('\nChoose min password length: '))
     mode_select = input(f"""
-                        \nM_anual - Skips smart dictionary, choose to continue after each phase and every 1mil attemps
+                        \nM_anual - Skips smart dictionary, choose to continue after each phase and every 100 mil attemps
                         \nS_emi Auto - Skips smart dictionary and choose to continue after each phase
                         \nF_ull Auto - Skips smart dictionary and runs until cracked or ctrl-c
                         \nSmart D_ictionary - Attack using OSINT info before starting blind attacks

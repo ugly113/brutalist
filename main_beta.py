@@ -7,7 +7,8 @@ characters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$
 # Smart dictionary from user input
 dictionary = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '=', '?',
                 '<', '>', 'loves', 'love', 'hate', '69', '666', '123', '777',
-                'Love', 'Loves', 'I', 'i']
+                'Love', 'Loves', 'I', 'i', '1', '2', '3', '4', '5', '6', '7',
+                '8', '9', '0']
 
 # Show results of password crack
 def results(attempt, cracked):
@@ -28,8 +29,8 @@ def list(length, password, attempt, cracked, mode):
                 cracked_pw = pw
                 cracked_pw_h = h.sha256(cracked_pw)
                 attempt += 1
-                if attempt % 1000000 == 0 and mode =='m':
-                    continue_check = (input('Continue? y/n '))
+                if attempt % 10000000 == 0 and mode =='m':
+                    continue_check = (input(f'{attempt:,} attempts. Continue? y/n '))
                     if continue_check == 'y':
                         continue
                     else:
@@ -54,8 +55,8 @@ def brute(length, password, attempt, cracked):
         print(*val)
         cracked_pw = ''.join(val)
         attempt += 1
-        if attempt % 100000 == 0 and mode == 'm':
-            continue_check = (input('Continue? y/n '))
+        if attempt % 10000000 == 0 and mode == 'm':
+            continue_check = (input(f'{attempt:,} attempts. Continue? y/n '))
             if continue_check == 'y':
                 continue
             else:
@@ -77,19 +78,25 @@ def smart_dict(password, attempt, cracked, dictionary, item_num, mode, length):
                 print(cracked_pw)
                 cracked_pw_h = h.sha256(cracked_pw)
                 attempt += 1
-                if attempt % 1000000 == 0 and mode == 'm':
-                    continue_check = (input('Continue? y/n '))
+                if attempt % 10000000 == 0 and mode == 'm':
+                    continue_check = (input(f'{attempt:,} attempts. Continue? y/n '))
                     if continue_check == 'y':
                         continue
                     else:
                         main()
                 if attempt % 10000000 == 0:
-                    continue_check = (input('Continue? y/n '))
+                    continue_check = (input(f'{attempt:,} attempts. Continue? y/n '))
                     if continue_check == 'y':
                         continue
+                    elif continue_check == 'n':
+                        next_attack = input('N_ext attack or M_ain? ')
+                        if next_attack.lower() == 'n':
+                            # Moves onto password list attack
+                            list(length, password, attempt, cracked, mode)
+                        else:
+                            main()
                     else:
-                        # Moves onto password list attack
-                        list(length, password, attempt, cracked, mode)
+                        exit()
                 if password == str(cracked_pw_h):
                     cracked = cracked_pw
                     results(attempt, cracked)
@@ -114,7 +121,7 @@ def main():
         dictionary1 = smart_dict_input.split()
         for item in dictionary1:
             dictionary.insert(0, item)
-            dictionary.append(item.title())
+            dictionary.insert(0, item.title())
         smart_dict(password, 0, False, dictionary, 0, mode, length)
     list(length, password, 0, False, mode)
 

@@ -87,15 +87,15 @@ HASHES = (
 )
 
 
-def identify_hashes(input_hash):
+def identify_hashes(password):
     """
     Function to identify all the hashes and return the results as list.
     :rtype : list
-    :param input_hash:
+    :param password:
     """
     res = []
     for items in HASHES:
-        if match(items[1], input_hash):
+        if match(items[1], password):
             res += [items[0]] if isinstance(items[0], str) else items[0]
     return res
 
@@ -113,29 +113,34 @@ def get_input(prompt):
         return raw_input(prompt)
 
 
-def start_process(input_hash):
-    if len(input_hash) < 1:
+def start_process(password):
+    if len(password) < 1:
         print("\nPlease enter the hash. No input hash found.")
     else:
         # Do the operation of Identifying the hashes.
-        results = identify_hashes(input_hash)
+        results = identify_hashes(password)
         # If the length of the list returned by the hash identifying method is zero
         # that means no hashes algorithms have been found
         if len(results) == 0:
             print("\n\n:( Sorry we are unable to identify the type of hash.")
+            results.append('Not Found')
+            hash_type = results[0]
         elif len(results) > 2:
             # Show the results with most and less probable hash algorithms
             print("\nMost Probable Hash Algorithms found:\n")
             print("[+] " + results[0])
             print("[+] " + results[1])
             print("\nOther Possible Hash Algorithms found:\n")
+            hash_type = results[0]
             for item in range(int(len(results)) - 2):
                 print("[+] " + results[item + 2])
         else:
             print("\nMost Probable Hash Algorithms found:\n")
             for item in range(int(len(results))):
                 print("[+] " + results[item])
+            hash_type = results[0]
 
+        return(hash_type)
 
 if __name__ == "__main__":
     exit(main())

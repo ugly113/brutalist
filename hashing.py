@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# encoding: utf-8
+# Author: ugly113 <https://github.com/ugly113/>
+
+
 import hashlib
 
 

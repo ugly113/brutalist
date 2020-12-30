@@ -115,17 +115,18 @@ def smart_dict(password, attempt, cracked, dictionary, item_num, mode, length):
 # smart dictionary input - initiate crack function
 def main():
     password = input('\nInput hashed password: ')
-    hashid.start_process(password)
-    print(hash_type)
+    hash_type = hashid.start_process(password)
+    if hash_type == 'Not found':
+        main()
     length = int(input('\nChoose min password length: '))
     mode_select = input(f"""
-                        \nM_anual - Skips smart dictionary, choose to continue 
+                        \nM_anual - Skips smart dictionary, choose to continue
                         after each phase and every 100 mil attemps
-                        \nS_emi Auto - Skips smart dictionary and choose to 
+                        \nS_emi Auto - Skips smart dictionary and choose to
                         continue after each phase
-                        \nF_ull Auto - Skips smart dictionary and runs until 
+                        \nF_ull Auto - Skips smart dictionary and runs until
                         cracked or ctrl-c
-                        \nSmart D_ictionary - Attack using OSINT info before 
+                        \nSmart D_ictionary - Attack using OSINT info before
                         starting blind attacks
                         \nChoose mode:
                         """)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 # Original Author: Psycho_Coder <https://psychocoder.github.io/>
-# Addapted by: ugly113 <https://github.com/ugly113/>
+# Adapted by: ugly113 <https://github.com/ugly113/>
 
 from re import match
 from sys import stdout, hexversion, exit, argv
@@ -123,7 +123,7 @@ def start_process(password):
         # that means no hashes algorithms have been found
         if len(results) == 0:
             print("\n\n:( Sorry we are unable to identify the type of hash.")
-            results.append('Not Found')
+            results.append('Not found')
             hash_type = results[0]
         elif len(results) > 2:
             # Show the results with most and less probable hash algorithms
@@ -140,7 +140,7 @@ def start_process(password):
                 print("[+] " + results[item])
             hash_type = results[0]
 
-        return(hash_type)
+        return hash_type
 
 if __name__ == "__main__":
     exit(main())
